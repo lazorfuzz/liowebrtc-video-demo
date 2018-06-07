@@ -36,7 +36,7 @@ class AddFriendDialog extends Component {
           readOnly
           ref={(el) => this.shareText = el}
           value={`${window.location.origin}/#${this.props.roomName}`}
-          style={{ marginRight: '1em' }}
+          style={{ marginRight: '1em', 'width': 400 }}
         />
         <button
           className="btn"
