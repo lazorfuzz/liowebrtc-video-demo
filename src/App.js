@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import IconButton from 'material-ui/IconButton'
 import './App.css';
-import Party from './Party';
-import AddFriendDialog from './AddFriendDialog';
+import Party from './components/Party';
+import AddFriendDialog from './components/AddFriendDialog';
 
 class App extends Component {
   constructor(props) {

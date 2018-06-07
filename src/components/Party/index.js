@@ -8,7 +8,7 @@ class Party extends Component {
     super(props);
     this.state = {
       nick: this.props.nick,
-      roomID: `party-${this.props.roomName}`,
+      roomID: `liowebrtc-vdemo-party-${this.props.roomName}`,
       peers: [],
       mutedPeerIds: [],
       inRoom: false,

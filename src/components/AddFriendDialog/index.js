@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import copy from 'clipboard-copy';
-import '../App.css';
+import '../../App.css';
 
 class AddFriendDialog extends Component {
   constructor(props) {
