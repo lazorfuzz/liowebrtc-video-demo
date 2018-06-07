@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
+import copy from 'clipboard-copy';
 import '../App.css';
 
 class AddFriendDialog extends Component {
@@ -11,8 +12,8 @@ class AddFriendDialog extends Component {
   }
 
   handleShareUrlCopy = () => {
-    this.shareText.select();
-    document.execCommand('copy');
+    copy(this.shareText.value);
+    this.shareText.focus();
     this.setState({ copyButtonText: 'Copied' });
   }
 
