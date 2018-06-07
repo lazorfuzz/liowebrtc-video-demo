@@ -1,0 +1,96 @@
+.App {
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+  align-items: center;
+}
+
+.header {
+  width: 800px;
+  max-width: 100%;
+  line-height: 30px;
+  transition: all 0.1s cubic-bezier(.24,.42,.92,.29);
+}
+
+a {
+  text-decoration: none;
+  color: #21ff58;
+}
+
+a:hover {
+  color: #6dff91;
+}
+
+.setup {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  max-width: 100%;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.btn {
+  border: none;
+  font-size: 18px;
+  font-weight: lighter;
+  padding: 10px 25px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background: #2cd659;
+  color: #ddffe6;
+  cursor: pointer;
+  margin: 1em 0;
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
+  transition: all 0.3s ease-in;
+}
+
+.btn:hover {
+  -webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.6);
+  -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.6);
+  box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.6);
+  color: white;
+}
+
+.partyWrapper {
+  width: 100%;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.roomName {
+  color: #888;
+}
+
+.roomLabel {
+  color: white;
+}
+
+.textBox {
+  margin: 5px 0;
+  border: 1px solid #333;
+  border-radius: 5px;
+  height: 40px;
+  padding-left: 10px;
+  background: #4f5560;
+  color: white;
+  font-size: 18px;
+  font-weight: lighter;
+  width: 300px;
+  max-width: 100%;
+  transition: all 0.3s ease-in;
+}
+
+.textBox:focus {
+  outline: none !important;
+  border:1px solid #21ff58;
+  box-shadow: 0 0 5px #6dff91;
+}
