@@ -1,6 +1,6 @@
 .wrapper, .inRoom {
   display: flex;
-  flex-direction: row;
+  flex-flow: row;
   color: white;
   background: #4f5560;
   border: 1px solid #333;
@@ -68,4 +68,11 @@
   flex-direction: row;
   align-self: flex-end;
   color: rgba(255,255,255,0.4);
+}
+
+@media screen and (max-width: 600px) {
+  .wrapper, .inRoom {
+    flex-flow: column;
+    align-items: center;
+  }
 }
