@@ -125,7 +125,7 @@ class Party extends Component {
   }
 
   setOverlayTimeout = (tgt) => tgt.overlayTimeout = setTimeout(() => {
-        if (!tgt) return;
+        if (!tgt || this.props.iOS) return;
         tgt.style.opacity = 0;
         for (const child of tgt.children) {
           child.style.visibility = 'hidden';
@@ -197,10 +197,9 @@ class Party extends Component {
               ref={(vid) => { this.localVid = vid; }}
               playsInline
               muted
-              autoPlay
             />
             <div
-              className={`overlay ${this.state.muted ? 'visible' : ''}`}
+              className={`overlay ${this.state.muted || this.props.iOS ? 'visible' : ''}`}
               onMouseMove={this.handleOverlayHover}
               onTouchEnd={this.handleOverlayHover}
               ref={(el) => this.localOverlay = el}
