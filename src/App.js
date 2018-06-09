@@ -3,7 +3,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import IconButton from 'material-ui/IconButton'
 import './App.css';
 import Party from './components/Party';
+import ColorDialog from './components/ColorDialog';
 import AddFriendDialog from './components/AddFriendDialog';
+import { getRandomRGB } from './components/Party/util';
 
 class App extends Component {
   constructor(props) {
@@ -12,15 +14,16 @@ class App extends Component {
       startChat: false,
       nick: '',
       roomName: '',
-      sharing: false
+      sharing: false,
+      windowColor: getRandomRGB()
     }
   }
 
   componentDidMount() {
-    this.roomNameInput.focus();
+    if (window.innerWidth > 800) this.roomNameInput.focus();
     if (window.location.hash && window.location.hash.length > 1) {
       this.setState({ roomName: window.location.hash.slice(1) });
-      this.nickInput.focus();
+      if (window.innerWidth > 800) this.nickInput.focus();
     }
   }
 
@@ -42,6 +45,8 @@ class App extends Component {
   handleInvite = () => this.setState({ sharing: true });
 
   handleQuit = () => this.setState({ startChat: false });
+
+  handleChangeColor = () => this.setState({ choosingColor: true });
 
   render() {
     return (
@@ -92,6 +97,13 @@ class App extends Component {
                 <div className="menu">
                   <IconButton
                     iconStyle={{ color: 'white' }}
+                    tooltip="Change Window Color"
+                    onClick={this.handleChangeColor}
+                    >
+                      <i className="material-icons">color_lens</i>
+                  </IconButton>
+                  <IconButton
+                    iconStyle={{ color: 'white' }}
                     tooltip="Add Friends"
                     onClick={this.handleInvite}
                     >
@@ -109,6 +121,7 @@ class App extends Component {
               <Party
                 roomName={`liowebrtc-vchat-demo-${this.state.roomName}`}
                 nick={this.state.nick}
+                windowColor={this.state.windowColor}
               />
             </div>
           }
@@ -117,6 +130,13 @@ class App extends Component {
             <AddFriendDialog
               roomName={this.state.roomName}
               onRequestClose={this.handleShareDialogClose}
+            />
+          }
+          {
+            this.state.next &&
+            <ColorDialog
+              color={this.state.windowColor}
+              onRequestClose={() => this.setState({ choosingColor: false })}
             />
           }
         </div>

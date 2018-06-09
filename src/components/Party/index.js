@@ -12,12 +12,14 @@ class Party extends Component {
       peers: [],
       mutedPeerIds: [],
       inRoom: false,
-      muted: false
+      muted: false,
+      windowColor: this.props.windowColor
     };
     this.remoteVideos = {};
   }
 
   componentDidMount() {
+    this.localVid.setAttribute("playsinline", true);
     this.webrtc = new LioWebRTC({
       // The url for your signaling server
       url: 'https://sandbox.simplewebrtc.com:443/',
@@ -37,6 +39,8 @@ class Party extends Component {
     this.webrtc.on('connectivityError', this.handleConnectionError);
     this.webrtc.on('mute', this.handlePeerMute);
     this.webrtc.on('unmute', this.handlePeerUnmute);
+    this.webrtc.on('receivedPeerData', this.handlePeerData);
+    this.webrtc.on('channelOpen', this.handleChannelOpen);
   }
 
   addVideo = (stream, peer) => {
@@ -49,6 +53,21 @@ class Party extends Component {
     this.setState({
       peers: this.state.peers.filter(p => !p.closed)
     });
+  }
+
+  handlePeerData = (type, data, peer) => {
+    switch (type) {
+      case 'windowColor':
+        peer.bColor = `rgb(${data.r}, ${data.g}, ${data.b})`;
+        this.setState({ roomCount: this.webrtc.getPeers().length });
+        break;
+      default:
+        break;
+    }
+  }
+
+  handleChannelOpen = () => {
+    this.webrtc.shout('windowColor', this.state.windowColor);
   }
 
   handleConnectionError = (peer) => {
@@ -89,6 +108,7 @@ class Party extends Component {
     <div key={p.id}>
       <div
         className="vidContainer"
+        style={{ borderColor: p.bColor }}
         id={/* The video container needs a special id */ `${this.webrtc.getContainerId(p)}`}>
         <video
           // Important: The video element needs both an id and ref
@@ -126,7 +146,10 @@ class Party extends Component {
         className={this.state.inRoom ? 'inRoom' : 'wrapper'}
         >
         <div>
-          <div className="vidContainer">
+          <div
+            className="vidContainer"
+            style={{ borderColor: `rgb(${this.state.windowColor.r}, ${this.state.windowColor.g}, ${this.state.windowColor.b})` }}
+            >
             <video
               // Important: The local video element needs to have a ref
               ref={(vid) => { this.localVid = vid; }}

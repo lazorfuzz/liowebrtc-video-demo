@@ -1,11 +1,11 @@
 {
-  "short_name": "LioWebRTC Video Chat",
+  "short_name": "vChat",
   "name": "LioWebRTC Video Chat Demo",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "lioreact.png",
+      "sizes": "128x128 64x64 32x32 24x24 16x16",
+      "type": "image/png"
     }
   ],
   "start_url": "./index.html",
