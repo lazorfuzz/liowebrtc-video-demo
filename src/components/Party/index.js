@@ -114,6 +114,7 @@ class Party extends Component {
           id={this.webrtc.getId(p)}
           ref={(v) => this.remoteVideos[p.id] = v}
           playsInline
+          autoPlay
           />
         <div
           className={`overlay ${this.state.mutedPeerIds.includes(p.id) ? 'visible' : ''}`}
@@ -154,6 +155,7 @@ class Party extends Component {
               // Important: The local video element needs to have a ref
               ref={(vid) => { this.localVid = vid; }}
               playsInline
+              autoPlay
             />
             <div
               className={`overlay ${this.state.muted ? 'visible' : ''}`}
