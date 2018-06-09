@@ -15,11 +15,19 @@ class App extends Component {
       nick: '',
       roomName: '',
       sharing: false,
-      windowColor: getRandomRGB()
+      windowColor: getRandomRGB(),
+      iOS: false,
+      startVideo: false
     }
   }
 
   componentDidMount() {
+    const ua = window.navigator.userAgent;
+    const iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
+    const webkit = !!ua.match(/WebKit/i);
+    const iOSSafari = iOS && webkit && !ua.match(/CriOS/i);
+    if (iOSSafari) this.setState({ iOS: true });
+
     if (window.innerWidth > 800) this.roomNameInput.focus();
     if (window.location.hash && window.location.hash.length > 1) {
       this.setState({ roomName: window.location.hash.slice(1) });
@@ -47,6 +55,8 @@ class App extends Component {
   handleQuit = () => this.setState({ startChat: false });
 
   handleChangeColor = () => this.setState({ choosingColor: true });
+
+  handleStartVideo = () => this.setState({ iOS: false });
 
   render() {
     return (
@@ -122,6 +132,8 @@ class App extends Component {
                 roomName={`liowebrtc-vchat-demo-${this.state.roomName}`}
                 nick={this.state.nick}
                 windowColor={this.state.windowColor}
+                iOS={this.state.iOS}
+                handleStartVideo={this.handleStartVideo}
               />
             </div>
           }

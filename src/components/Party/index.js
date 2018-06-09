@@ -24,8 +24,6 @@ class Party extends Component {
       url: 'https://sandbox.simplewebrtc.com:443/',
       // The local video ref set within your render function
       localVideoEl: this.localVid,
-      // Immediately request camera access
-      autoRequestMedia: true,
       // Optional: nickname
       nick: this.state.nick,
       debug: true
@@ -40,6 +38,9 @@ class Party extends Component {
     this.webrtc.on('unmute', this.handlePeerUnmute);
     this.webrtc.on('receivedPeerData', this.handlePeerData);
     this.webrtc.on('channelOpen', this.handleChannelOpen);
+    this.webrtc.on('localMediaError', (e) => alert(`Local Media Error\n\n${e.toString()}`));
+
+    if (!this.props.iOS) this.webrtc.startLocalVideo();
   }
 
   addVideo = (stream, peer) => {
@@ -95,6 +96,11 @@ class Party extends Component {
     this.setState({ mutedPeerIds: this.state.mutedPeerIds.filter(id => id !== data.id) });
   }
 
+  handleVideoStart = () => {
+    this.props.handleStartVideo();
+    this.webrtc.startLocalVideo();
+  }
+
   readyToCall = () => {
     // Starts the process of joining a room.
     this.webrtc.joinRoom(this.state.roomID, (err, desc) => {
@@ -114,7 +120,6 @@ class Party extends Component {
           id={this.webrtc.getId(p)}
           ref={(v) => this.remoteVideos[p.id] = v}
           playsInline
-          autoPlay
           />
         <div
           className={`overlay ${this.state.mutedPeerIds.includes(p.id) ? 'visible' : ''}`}
@@ -147,6 +152,15 @@ class Party extends Component {
         className={this.state.inRoom ? 'inRoom' : 'wrapper'}
         >
         <div>
+          {
+            this.props.iOS &&
+            <IconButton
+              tooltip="Start Video"
+              onClick={this.handleVideoStart}
+              >
+                <i className="material-icons">video_call</i>
+            </IconButton>
+          }
           <div
             className="vidContainer"
             style={{ borderColor: `rgb(${this.state.windowColor.r}, ${this.state.windowColor.g}, ${this.state.windowColor.b})` }}
@@ -156,7 +170,6 @@ class Party extends Component {
               ref={(vid) => { this.localVid = vid; }}
               playsInline
               muted
-              autoPlay
             />
             <div
               className={`overlay ${this.state.muted ? 'visible' : ''}`}
