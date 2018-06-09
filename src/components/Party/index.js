@@ -40,7 +40,11 @@ class Party extends Component {
     this.webrtc.on('channelOpen', this.handleChannelOpen);
     this.webrtc.on('localMediaError', (e) => alert(`Local Media Error\n\n${e.toString()}`));
 
-    if (!this.props.iOS) this.webrtc.startLocalVideo();
+    if (!this.props.iOS) {
+      this.webrtc.startLocalVideo();
+    } else {
+      this.setState({ inRoom: true });
+    }
   }
 
   addVideo = (stream, peer) => {
