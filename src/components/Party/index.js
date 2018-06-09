@@ -19,7 +19,6 @@ class Party extends Component {
   }
 
   componentDidMount() {
-    this.localVid.setAttribute("playsinline", true);
     this.webrtc = new LioWebRTC({
       // The url for your signaling server
       url: 'https://sandbox.simplewebrtc.com:443/',
@@ -114,6 +113,7 @@ class Party extends Component {
           // Important: The video element needs both an id and ref
           id={this.webrtc.getId(p)}
           ref={(v) => this.remoteVideos[p.id] = v}
+          playsInline
           />
         <div
           className={`overlay ${this.state.mutedPeerIds.includes(p.id) ? 'visible' : ''}`}
@@ -153,6 +153,7 @@ class Party extends Component {
             <video
               // Important: The local video element needs to have a ref
               ref={(vid) => { this.localVid = vid; }}
+              playsInline
             />
             <div
               className={`overlay ${this.state.muted ? 'visible' : ''}`}
