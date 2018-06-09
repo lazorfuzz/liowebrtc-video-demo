@@ -15,6 +15,7 @@ class AddFriendDialog extends Component {
     copy(this.shareText.value);
     this.shareText.focus();
     this.setState({ copyButtonText: 'Copied' });
+    setTimeout(() => { this.props.onRequestClose(); }, 800);
   }
 
   render() {

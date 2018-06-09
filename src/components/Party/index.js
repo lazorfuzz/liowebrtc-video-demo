@@ -110,6 +110,7 @@ class Party extends Component {
   handleVideoStart = () => {
     this.props.handleStartVideo();
     this.webrtc.startLocalVideo();
+    this.wrapper.focus();
   }
 
   readyToCall = () => {
@@ -163,6 +164,7 @@ class Party extends Component {
     return (
       <div
         className={this.state.inRoom ? 'inRoom' : 'wrapper'}
+        ref={(e) => this.wrapper = e}
         >
         <div>
           <div
