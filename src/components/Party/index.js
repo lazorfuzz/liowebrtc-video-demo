@@ -155,6 +155,7 @@ class Party extends Component {
               // Important: The local video element needs to have a ref
               ref={(vid) => { this.localVid = vid; }}
               playsInline
+              muted
               autoPlay
             />
             <div
