@@ -156,15 +156,6 @@ class Party extends Component {
         className={this.state.inRoom ? 'inRoom' : 'wrapper'}
         >
         <div>
-          {
-            this.props.iOS &&
-            <IconButton
-              tooltip="Start Video"
-              onClick={this.handleVideoStart}
-              >
-                <i className="material-icons">video_call</i>
-            </IconButton>
-          }
           <div
             className="vidContainer"
             style={{ borderColor: `rgb(${this.state.windowColor.r}, ${this.state.windowColor.g}, ${this.state.windowColor.b})` }}
@@ -174,17 +165,30 @@ class Party extends Component {
               ref={(vid) => { this.localVid = vid; }}
               playsInline
               muted
+              autoPlay
             />
             <div
               className={`overlay ${this.state.muted ? 'visible' : ''}`}
               >
                 <div className="overlayMiddle">
-                  <IconButton
-                    tooltip={this.state.muted ? 'Unmute' : 'Mute'}
-                    onClick={this.handleSelfMute}
-                    >
-                      <i className="material-icons">{this.state.muted ? 'volume_off' : 'volume_up'}</i>
-                  </IconButton>
+                  {
+                    this.props.iOS &&
+                    <IconButton
+                      tooltip="Start Video"
+                      onClick={this.handleVideoStart}
+                      >
+                        <i className="material-icons">video_call</i>
+                    </IconButton>
+                  }
+                  {
+                    !this.props.iOS &&
+                    <IconButton
+                      tooltip={this.state.muted ? 'Unmute' : 'Mute'}
+                      onClick={this.handleSelfMute}
+                      >
+                        <i className="material-icons">{this.state.muted ? 'volume_off' : 'volume_up'}</i>
+                    </IconButton>
+                  }
                 </div>
             </div>
           </div>
