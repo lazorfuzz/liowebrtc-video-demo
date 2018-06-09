@@ -45,19 +45,16 @@
   position: relative;
   height: inherit;
   width: inherit;
-  background: rgba(0,0,0,0.25);
+  background: rgba(0,0,0,0.35);
   margin-top: -155px;
   align-items: center;
   justify-content: center;
   opacity: 0;
+  transition: opacity 0.2s ease-in;
 }
 
 .overlay .material-icons {
   color: #e3e5e8;
-}
-
-.overlay:hover {
-  opacity: 1;
 }
 
 .visible {

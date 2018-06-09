@@ -28,16 +28,7 @@ class Party extends Component {
       debug: true
     });
 
-    this.webrtc.on('videoAdded', this.addVideo);
-    this.webrtc.on('videoRemoved', this.removeVideo);
-    this.webrtc.on('readyToCall', this.readyToCall);
-    this.webrtc.on('iceFailed', this.handleConnectionError);
-    this.webrtc.on('connectivityError', this.handleConnectionError);
-    this.webrtc.on('mute', this.handlePeerMute);
-    this.webrtc.on('unmute', this.handlePeerUnmute);
-    this.webrtc.on('receivedPeerData', this.handlePeerData);
-    this.webrtc.on('channelOpen', this.handleChannelOpen);
-    this.webrtc.on('localMediaError', (e) => alert(`Local Media Error\n\n${e.toString()}\n\nDoes your browser allow camera and mic access?`));
+    this.addListeners();
 
     if (!this.props.iOS) {
       this.webrtc.startLocalVideo();
@@ -52,6 +43,19 @@ class Party extends Component {
     if (pc.r !== c.r || pc.g !== c.g || pc.b !== c.b) {
       this.webrtc.shout('windowColor', c);
     }
+  }
+
+  addListeners = () => {
+    this.webrtc.on('videoAdded', this.addVideo);
+    this.webrtc.on('videoRemoved', this.removeVideo);
+    this.webrtc.on('readyToCall', this.readyToCall);
+    this.webrtc.on('iceFailed', this.handleConnectionError);
+    this.webrtc.on('connectivityError', this.handleConnectionError);
+    this.webrtc.on('mute', this.handlePeerMute);
+    this.webrtc.on('unmute', this.handlePeerUnmute);
+    this.webrtc.on('receivedPeerData', this.handlePeerData);
+    this.webrtc.on('channelOpen', this.handleChannelOpen);
+    this.webrtc.on('localMediaError', (e) => alert(`Local Media Error\n\n${e.toString()}\n\nDoes your browser allow camera and mic access?`));
   }
 
   addVideo = (stream, peer) => {
@@ -77,9 +81,7 @@ class Party extends Component {
     }
   }
 
-  handleChannelOpen = () => {
-    this.webrtc.shout('windowColor', this.props.windowColor);
-  }
+  handleChannelOpen = () => this.webrtc.shout('windowColor', this.props.windowColor);
 
   handleConnectionError = (peer) => {
     const pc = peer.pc;
@@ -87,7 +89,7 @@ class Party extends Component {
     console.log('had remote relay candidate', pc.hadRemoteRelayCandidate);
   }
 
-  handleSelfMute = () => {
+  handleSelfMute = (e) => {
     const muted = this.state.muted;
     if (muted) {
       this.webrtc.unmute();
@@ -110,8 +112,25 @@ class Party extends Component {
   handleVideoStart = () => {
     this.props.handleStartVideo();
     this.webrtc.startLocalVideo();
-    this.wrapper.focus();
   }
+
+  handleOverlayHover = (e) => {
+    if (!e.target.className.includes('overlay ')) return;
+    clearTimeout(e.target.overlayTimeout);
+    for (const child of e.target.children) {
+      child.style.visibility = 'visible';
+    }
+    e.target.style.opacity = 1;
+    this.setOverlayTimeout(e.target);
+  }
+
+  setOverlayTimeout = (tgt) => tgt.overlayTimeout = setTimeout(() => {
+        if (!tgt) return;
+        tgt.style.opacity = 0;
+        for (const child of tgt.children) {
+          child.style.visibility = 'hidden';
+        }
+      }, 1000);
 
   readyToCall = () => {
     // Starts the process of joining a room.
@@ -135,6 +154,8 @@ class Party extends Component {
           />
         <div
           className={`overlay ${this.state.mutedPeerIds.includes(p.id) ? 'visible' : ''}`}
+          onMouseMove={this.handleOverlayHover}
+          onTouchEnd={this.handleOverlayHover}
           >
             <div className="overlayBottom">
               {
@@ -180,6 +201,9 @@ class Party extends Component {
             />
             <div
               className={`overlay ${this.state.muted ? 'visible' : ''}`}
+              onMouseMove={this.handleOverlayHover}
+              onTouchEnd={this.handleOverlayHover}
+              ref={(el) => this.localOverlay = el}
               >
                 <div className="overlayMiddle">
                   {
