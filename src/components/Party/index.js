@@ -12,8 +12,7 @@ class Party extends Component {
       peers: [],
       mutedPeerIds: [],
       inRoom: false,
-      muted: false,
-      windowColor: this.props.windowColor
+      muted: false
     };
     this.remoteVideos = {};
   }
@@ -38,12 +37,20 @@ class Party extends Component {
     this.webrtc.on('unmute', this.handlePeerUnmute);
     this.webrtc.on('receivedPeerData', this.handlePeerData);
     this.webrtc.on('channelOpen', this.handleChannelOpen);
-    this.webrtc.on('localMediaError', (e) => alert(`Local Media Error\n\n${e.toString()}`));
+    this.webrtc.on('localMediaError', (e) => alert(`Local Media Error\n\n${e.toString()}\n\nDoes your browser allow camera and mic access?`));
 
     if (!this.props.iOS) {
       this.webrtc.startLocalVideo();
     } else {
       this.setState({ inRoom: true });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const pc = prevProps.windowColor;
+    const c = this.props.windowColor;
+    if (pc.r !== c.r || pc.g !== c.g || pc.b !== c.b) {
+      this.webrtc.shout('windowColor', c);
     }
   }
 
@@ -62,7 +69,7 @@ class Party extends Component {
   handlePeerData = (type, data, peer) => {
     switch (type) {
       case 'windowColor':
-        peer.bColor = `rgb(${data.r}, ${data.g}, ${data.b})`;
+        peer.bColor = `rgba(${data.r}, ${data.g}, ${data.b}, ${data.a})`;
         this.setState({ roomCount: this.webrtc.getPeers().length });
         break;
       default:
@@ -71,7 +78,7 @@ class Party extends Component {
   }
 
   handleChannelOpen = () => {
-    this.webrtc.shout('windowColor', this.state.windowColor);
+    this.webrtc.shout('windowColor', this.props.windowColor);
   }
 
   handleConnectionError = (peer) => {
@@ -151,6 +158,8 @@ class Party extends Component {
   }
 
   render() {
+    const { windowColor } = this.props;
+
     return (
       <div
         className={this.state.inRoom ? 'inRoom' : 'wrapper'}
@@ -158,7 +167,7 @@ class Party extends Component {
         <div>
           <div
             className="vidContainer"
-            style={{ borderColor: `rgb(${this.state.windowColor.r}, ${this.state.windowColor.g}, ${this.state.windowColor.b})` }}
+            style={{ borderColor: `rgba(${windowColor.r}, ${windowColor.g}, ${windowColor.b}, ${windowColor.a})` }}
             >
             <video
               // Important: The local video element needs to have a ref

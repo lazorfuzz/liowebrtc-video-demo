@@ -15,7 +15,7 @@ function getRandomRGB() {
   const r = randColor();
   const g = randColor();
   const b = randColor();
-  return ({ r, g, b });
+  return ({ r, g, b, a: 1 });
 }
 
 module.exports = {

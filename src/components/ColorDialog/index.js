@@ -18,20 +18,20 @@ class ColorDialog extends Component {
 
     return (
       <Dialog
-        title="Add Friends"
-        contentStyle={{ maxWidth: 600 }}
+        title="Change Color"
+        contentStyle={{ maxWidth: '275px' }}
         bodyStyle={dStyle}
         titleStyle={dStyle}
+        autoDetectWindowHeight
         modal={false}
         open={true}
         onRequestClose={this.props.onRequestClose}
         >
         <p>Change your video window color.</p>
-        <ColorPicker />
-        <button
-          className="btn"
-          onClick={this.handleShareUrlCopy}
-          >{this.state.copyButtonText}</button>
+        <ColorPicker
+          value={this.state.color}
+          onChange={this.props.onColorChange}
+        />
       </Dialog>
     );
   }

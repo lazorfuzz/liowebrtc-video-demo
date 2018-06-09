@@ -3,7 +3,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import IconButton from 'material-ui/IconButton'
 import './App.css';
 import Party from './components/Party';
-import ColorDialog from './components/ColorDialog';
+import ChromePicker from 'react-color';
 import AddFriendDialog from './components/AddFriendDialog';
 import { getRandomRGB } from './components/Party/util';
 
@@ -17,7 +17,8 @@ class App extends Component {
       sharing: false,
       windowColor: getRandomRGB(),
       iOS: false,
-      startVideo: false
+      startVideo: false,
+      choosingColor: false
     }
   }
 
@@ -54,9 +55,14 @@ class App extends Component {
 
   handleQuit = () => this.setState({ startChat: false });
 
-  handleChangeColor = () => this.setState({ choosingColor: true });
+  handleChangeColor = () => this.setState({ choosingColor: !this.state.choosingColor });
 
   handleStartVideo = () => this.setState({ iOS: false });
+
+  handleColorSlide = (color) => {
+    console.log(color.rgb);
+    this.setState({ windowColor: color.rgb });
+  }
 
   render() {
     return (
@@ -112,6 +118,16 @@ class App extends Component {
                     >
                       <i className="material-icons">color_lens</i>
                   </IconButton>
+                  {
+                    this.state.choosingColor &&
+                    <div className="colorPopOver">
+                      <div className="colorCover" onClick={() => this.setState({ choosingColor: false })} />
+                      <ChromePicker
+                        color={this.state.windowColor}
+                        onChange={this.handleColorSlide}
+                      />
+                    </div>
+                  }
                   <IconButton
                     iconStyle={{ color: 'white' }}
                     tooltip="Add Friends"
@@ -142,13 +158,6 @@ class App extends Component {
             <AddFriendDialog
               roomName={this.state.roomName}
               onRequestClose={this.handleShareDialogClose}
-            />
-          }
-          {
-            this.state.next &&
-            <ColorDialog
-              color={this.state.windowColor}
-              onRequestClose={() => this.setState({ choosingColor: false })}
             />
           }
         </div>
